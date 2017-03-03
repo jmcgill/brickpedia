@@ -1,0 +1,5 @@
+# A timeseries with a date that is invalid in the American format
+# but valid in the Australian format.
+Output = [
+  ['14/01/2017', 0]
+]

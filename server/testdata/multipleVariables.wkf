@@ -1,0 +1,6 @@
+# Test returning multiple variables
+VariableOne = 1
+VariableTwo = 'James'
+
+# Lower case variables are not exported
+notExportedVariable = true;

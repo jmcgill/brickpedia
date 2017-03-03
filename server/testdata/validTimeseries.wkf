@@ -1,0 +1,5 @@
+# Return a valid timeseries
+Output = [
+  ['01/01/2016', 0],
+  ['01/01/2017', 1]
+]

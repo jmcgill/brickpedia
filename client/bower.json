@@ -1,0 +1,14 @@
+{
+  "name": "brickpedia-client",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "requirejs": "*",
+    "typeahead.js": "*",
+    "boostrap": "*",
+    "underscore": "^1.8.3",
+    "backbone.marionette": "marionette#^3.2.0",
+    "handlebars": "^4.0.5",
+    "text": "requirejs-text#^2.0.15"
+  }
+}

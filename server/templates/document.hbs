@@ -1,0 +1,159 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script src="/static/libs/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/gitgraph/gitgraph.css"/>
+
+    <!-- I (terribly) hacked a Gif commit renderer. It works for now! -->
+    <script src="/static/libs/gitgraph/gitgraph-heavily-hacked.js"></script>
+    <link rel="stylesheet"
+          href="/static/libs/highlight/styles/atom-one-dark.css">
+    <script src="/static/libs/highlight/highlight.pack.js"></script>
+    <script type="text/javascript">    hljs.initHighlightingOnLoad(); </script>
+    <script type="text/javascript" src="//use.typekit.net/foh6jks.js"></script>
+    <script type="text/javascript">try {
+        Typekit.load();
+    } catch (e) {
+    }</script>
+    <script type='text/javascript'>
+        // Render all the output variables here.
+        var blocks = [
+            {% for block in blocks %}
+                {% if block.type == 'code' %}
+                    {{ block|json }},
+                {% endif %}
+            {% endfor %}
+        ];
+
+        // TODO(jmcgill): Consider doing all of this on the server rather than
+        // the client to make PDF export easier.
+
+        function numberWithCommas(x) {
+            // Truncate to two decimal places first.
+            x = x.toFixed(2);
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function ObjectToTable(obj) {
+            var html = '<table>';
+            for (var key in obj) {
+                html += '<tr><td><b>' + key + '</b></td><td>' + obj[key] + '</td></tr>';
+            }
+            html += '</table>'
+            return html;
+        }
+
+        function RenderWorkflowChart(id, state) {
+            var config = {
+                template: "metro",
+                orientation: "horizontal",
+                elementId: id,
+                // mode: "compact"
+            };
+            var gitGraph = new GitGraph(config);
+            var master = gitGraph.branch("master");
+
+            // Skip empty charts (from inline blocks which load no data)
+            if (state.__state.children.children.length == 0) {
+                // Hide the chart.
+                $('#' + id).hide();
+                return;
+            }
+
+            RenderNode(state.__state.children, master);
+        }
+
+        function RenderNode(state, branch) {
+            branch.commit({
+                message: state.filename,
+                hover: "Long description"//state.description
+            });
+
+            if (!state.children) {
+                return;
+            }
+
+            // Render all subsequent nodes on their own branch
+            for (var i = 1; i < state.children.length; ++i) {
+                var childBranch = branch.branch({
+                    name: "child"
+                });
+                RenderNode(state.children[i], childBranch);
+            }
+
+            RenderNode(state.children[0], branch)
+        }
+
+        function onLoad() {
+            for (var i = 0; i < blocks.length; ++i) {
+                var block = blocks[i];
+                for (key in block.data) {
+                    // Ignore non-exported variables.
+                    if (key[0].toUpperCase() != key[0]) {
+                        continue;
+                    }
+
+                    // Find all instances of this variable.
+                    $('.variabletext#' + key).each(function (i, el) {
+                        var data = block.data[key];
+                        if (typeof data == 'number') {
+                            $(el).html(numberWithCommas(block.data[key]));
+                        } else if (typeof data == 'object') {
+                            $(el).html(ObjectToTable(data));
+                        } else {
+                            $(el).html(JSON.stringify(data));
+                        }
+                    });
+
+                    // Update tooltips where appropriate
+                    var tooltip = block.annotations[key];
+                    if (tooltip) {
+                        $('.tooltiptext #' + key).each(function (i, el) {
+                            $(el).parent().html(key + ': <i>' + tooltip + '</i>');
+                        });
+                    } else {
+                        $('.tooltiptext #' + key).each(function (i, el) {
+                            $(el).parent().html(key);
+                        });
+                    }
+                }
+
+                // Render flow graphs for code blocks
+                if (block.type == 'code') {
+                    RenderWorkflowChart(block.id, block.data);
+                }
+            }
+        }
+    </script>
+</head>
+<body onload="onLoad()">
+<div class="main">
+    <!-- Render Alerts -->
+    {% for block in blocks %}
+    {% if block.type == 'code' %}
+    {% for alert in block.alerts %}
+    <div class="alert">{{ alert.text }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+
+    {% for block in blocks %}
+
+    {% if block.type == 'html' %}
+    {{ block.contents }}
+    {% endif %}
+
+    {% if block.type == 'code' %}
+    <div style='width: 100%; overflow: scroll; margin-bottom: 15px;'>
+        <canvas id="{{ block.id }}"></canvas>
+    </div>
+    <pre>
+<code class="coffeescript">{{ block.code }}</code>
+</pre>
+    <b>{{ block.contents }}</b>
+    {% endif %}
+
+    {% endfor %}
+</div>
+</body>
+</html>

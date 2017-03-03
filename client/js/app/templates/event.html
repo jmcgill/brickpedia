@@ -1,0 +1,141 @@
+<style>
+    .outer-container {
+        background: #eceef0;
+        /*-webkit-border-radius: 3px;*/
+        font-size: 32px;
+        font-weight: 100;
+        line-height: 42px;
+        padding: 15px;
+        margin-bottom: 15px;
+        width: 100%;
+
+        /* When selected */
+    }
+
+    .selected {
+        border: solid 1px #86639c;;
+    }
+
+    .highlight-container {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .highlight {
+        line-height: 72px;
+        background: #86639c;
+        /* or 59a6a6 */
+        width: 10px;
+        margin-right: 15px;
+        margin-left: -15px;
+        margin-top: -15px;
+        margin-bottom: -15px;
+    }
+
+    .highlight-right {
+        flex-grow: 1;
+        position: relative;
+    }
+
+    .close-container {
+        text-align: right;
+        font-size: 0.5em;
+        cursor: pointer;
+        position: absolute;
+        top: 0px;
+        font-style: normal;
+    }
+
+    .event-container {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .btn.btn-primary {
+        background: #1cb4cb;
+        border: 0px;
+    }
+
+    .title-container {
+        text-align: left;
+        flex-grow: 1;
+    }
+
+    .button-container {
+        width: 100px;
+    }
+
+    .summary-container {
+        font-size: 0.5em;
+        color: #878787;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        text-align: left;
+        font-style: italic;
+        line-height: 0.5em;
+    }
+
+    .instructions-container {
+        flex-grow: 2;
+        margin-top: 5px;
+    }
+
+    .scheduled-time-container {
+        color: #bb0000;
+    }
+
+    .notes-container {
+        width: 10px;
+    }
+</style>
+
+
+<div class="tk-museo-sans outer-container {{#if selected}}selected{{/if}}" id="event-container">
+
+    <div class="highlight-container">
+        <div class="highlight">
+        </div>
+
+        <div class="highlight-right">
+            <!-- Close button -->
+
+            <!-- Main title and actions -->
+            <div class="tk-museo-sans event-container">
+                <div class="title-container">
+                    {{{ linked_title }}}
+                </div>
+
+                <!--<div class="button-container">
+                      <button class="btn btn-large btn-primary" value="Borrow">Delete</button>
+                </div>-->
+            </div>
+
+            <!-- Sub text -->
+            <div class="tk-museo-sans summary-container">
+                <div class="instructions-container">
+                    For {{ duration_minutes }} minutes
+                    {{#if deadline }}
+                    before {{ strftime "%B %d" deadline }}
+                    {{/if}}
+                    <span class="scheduled-time-container">
+			  	{{#if scheduled}}
+			  		{{ strftime "%a %B %d %H:%M" scheduled }} for {{ duration_minutes }} minutes
+			  	{{/if}}
+			  	</span>
+                </div>
+
+                <div class="notes-container">
+                    <div class="close-container" id="close-button">
+                        ✕
+                    </div>
+                    <div class="notes-icon" id="notes-icon">
+                        ●
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

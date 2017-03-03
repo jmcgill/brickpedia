@@ -1,0 +1,27 @@
+<style>
+    #decryptionKey {
+    }
+
+    #decryptionWarning {
+        color: white;
+        font-weight: bold;
+        background: #d9534f;
+        border-radius: 3px;
+        margin: 10px;
+        width: 500px;
+        font-size: 24px;
+    }
+</style>
+<div id="decryptionKey">
+    {{#unless passphrase}}
+    <div id="decryptionWarning">
+        Warning! No decryption key set. Saved events will be unencrypted.
+    </div>
+    <form role="form">
+        <div class="form-group">
+            <input class="form-control" id="passphrase" placeholder="Enter decryption passphrase" style="width: 500px">
+            <button id="unlock" class="btn btn-success" style="margin: 10px;">Unlock</button>
+        </div>
+    </form>
+    {{/unless}}
+</div>

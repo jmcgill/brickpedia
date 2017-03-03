@@ -1,0 +1,5 @@
+# A dataset with no timeseries
+Output = [
+  [0],
+  [1]
+]

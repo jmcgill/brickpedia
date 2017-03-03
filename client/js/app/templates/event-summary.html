@@ -1,0 +1,51 @@
+<style>
+    #output-inner {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 2px;
+        margin-bottom: 25px;
+        min-width: 500px;
+        display: table-cell;
+        padding: 25px;
+    }
+</style>
+
+<!-- Event summary -->
+<div id="output-inner">
+    <!-- Title -->
+    <span class="glyphicon glyphicon-plus"></span>
+    <span id="output-title" style="white-space: nowrap;">
+        {{{ linked_title }}}
+    </span><br>
+
+    <!-- Duration of the event -->
+    <span class="glyphicon glyphicon-time"></span>
+    <span id="output-time">
+        {{ duration_minutes }} minutes
+    </span><br>
+
+    <!-- Deadline for the event -->
+    <span class="glyphicon glyphicon-calendar"></span>
+    <span id="output-date">
+        {{#if deadline}}
+        Before {{ strftime "%B %d" deadline }}
+        {{else}}
+        No deadline
+        {{/if}}
+    </span><br>
+
+    <!-- Does the event repeat? -->
+    <span class="glyphicon glyphicon-repeat"></span>
+    <span id="output-repeat">
+        {{#if repeats}}
+        Every {{ repeat_duration }} {{ repeat_units }}
+        {{ else }}
+        Never
+        {{/if}}
+    </span><br>
+
+    <!-- Queue to which the event belongs -->
+    <span class="glyphicon glyphicon-bookmark"></span>
+    <span id="output-queue">
+        #{{ queue }}
+    </span><br>
+</div>

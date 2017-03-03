@@ -1,0 +1,34 @@
+{
+  "name": "brickpedia",
+  "description": "An encyclopedia of Nanoblock designs",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "chai": "*",
+    "consolidate": "*",
+    "express": "3.x",
+    "fibrous": "0.4.0",
+    "handlebars": "*",
+    "mocha": "^2.2.4",
+    "moment": "^2.8.3",
+    "sinon": "^1.14.1",
+    "string-format": "*",
+  },
+  "scripts": {
+    "test": "mocha ./*-test.js",
+    "build-css": "node-sass main.scss main.css"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-build-requirejs": "^0.1.2-rc7",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-jsbeautifier": "^0.2.7",
+    "mocha": "^2.5.3",
+    "node-sass": "^4.1.1",
+    "nodemon": "^1.11.0",
+    "walk": "*"
+  }
+}
